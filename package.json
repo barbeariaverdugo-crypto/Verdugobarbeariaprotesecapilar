@@ -4,7 +4,9 @@
   "private": true,
   "description": "Sistema de gestão da Verdugo Barbearia e Prótese Capilar",
   "type": "module",
-  "engines": { "node": ">=22.13" },
+  "engines": {
+    "node": ">=22.13"
+  },
   "scripts": {
     "start": "node --disable-warning=ExperimentalWarning server/index.js",
     "definir-senha": "node --disable-warning=ExperimentalWarning scripts/definir-senha.js",
@@ -14,5 +16,6 @@
   },
   "dependencies": {
     "express": "^4.21.2"
-  }
+  },
+  "main": "app.cjs"
 }

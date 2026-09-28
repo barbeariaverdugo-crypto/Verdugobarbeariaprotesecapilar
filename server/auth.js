@@ -5,6 +5,7 @@ const COOKIE = 'vd_sess';
 const SESSION_DAYS = 14;
 const MAX_FAILS = 5;            // tentativas erradas por IP...
 const WINDOW_MIN = 15;          // ...a cada 15 minutos
+const MAX_FAILS_TOTAL = 30;     // trava geral: erros somando TODOS os IPs no mesmo intervalo (vale mesmo se o IP puder ser forjado)
 
 export function hashPassword(password) {
   const salt = randomBytes(16);
@@ -62,10 +63,12 @@ export function sessionFromReq(db, req) {
   return s;
 }
 
-function tooManyFails(db, ip) {
+export function tooManyFails(db, ip) {
   const since = new Date(Date.now() - WINDOW_MIN * 60000).toISOString();
   const r = one(db, 'SELECT COUNT(*) AS n FROM login_attempts WHERE ip = ? AND ok = 0 AND at > ?', ip, since);
-  return r.n >= MAX_FAILS;
+  if (r.n >= MAX_FAILS) return true;
+  const t = one(db, 'SELECT COUNT(*) AS n FROM login_attempts WHERE ok = 0 AND at > ?', since);
+  return t.n >= MAX_FAILS_TOTAL;
 }
 
 export function login(db, req, res) {

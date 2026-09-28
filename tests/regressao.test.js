@@ -113,3 +113,14 @@ test('R9. data com horário e fuso vira o dia certo em São Paulo', async () => 
   await api.post('/api/online/importar', { channel: 'amazon', filename: 't.csv', csv });
   assert.equal(db.prepare("SELECT date FROM online_orders WHERE order_number='R9-1'").get().date, '2026-09-09');
 });
+
+test('R10. trava geral de login: muitos erros vindos de IPs diferentes também bloqueiam', async () => {
+  const { tooManyFails } = await import('../server/auth.js');
+  const ins = T.db.prepare('INSERT INTO login_attempts(ip, at, ok) VALUES (?, ?, 0)');
+  const now = new Date().toISOString();
+  for (let i = 0; i < 29; i++) ins.run(`10.0.0.${i}`, now);
+  assert.equal(tooManyFails(T.db, '10.9.9.9'), false, 'abaixo do limite geral, IP novo entra');
+  ins.run('10.0.0.99', now);
+  assert.equal(tooManyFails(T.db, '10.9.9.9'), true, 'no limite geral, bloqueia até IP novo');
+  T.db.prepare('DELETE FROM login_attempts').run();
+});
