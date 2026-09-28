@@ -8,6 +8,9 @@ export const h = (fn) => (req, res, next) => {
   } catch (e) { next(e); }
 };
 
+/** Mesmo que h(), para rotas que devolvem uma resposta própria (arquivo, CSV) ou que são assíncronas. */
+export const ha = (fn) => (req, res, next) => { Promise.resolve().then(() => fn(req, res)).catch(next); };
+
 export class HttpError extends Error {
   constructor(status, message) { super(message); this.status = status; }
 }
@@ -19,7 +22,7 @@ export function errorHandler(err, req, res, _next) {
   if (err?.type === 'entity.parse.failed') return res.status(400).json({ erro: 'Dados enviados em formato inválido.' });
   if (err?.type === 'entity.too.large') return res.status(413).json({ erro: 'Arquivo grande demais (máx. 5 MB).' });
   const msg = String(err?.message || '');
-  if (msg.includes('UNIQUE constraint failed')) return res.status(409).json({ erro: 'Já existe um registro com esse identificador/nome.' });
+  if (err?.code === '23505' || msg.includes('UNIQUE constraint failed')) return res.status(409).json({ erro: 'Já existe um registro com esse identificador/nome.' });
   console.error(err);
   res.status(500).json({ erro: 'Erro interno. Nada foi gravado pela metade — tente de novo.' });
 }

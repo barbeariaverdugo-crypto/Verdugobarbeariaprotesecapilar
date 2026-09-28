@@ -256,7 +256,7 @@ test('10. texto em campo numérico é bloqueado e não afeta os totais', async (
 });
 
 test('11a. só a conta do proprietário acessa (API e páginas)', async () => {
-  const semLogin = [await T.anon.get('/api/inicio'), await T.anon.get('/api/produtos'), await T.anon.get('/api/exportar/backup.sqlite')];
+  const semLogin = [await T.anon.get('/api/inicio'), await T.anon.get('/api/produtos'), await T.anon.get('/api/exportar/backup.json')];
   for (const r of semLogin) assert.equal(r.status, 401);
   const pagina = await T.anon.get('/');
   assert.equal(pagina.status, 302);
@@ -284,17 +284,23 @@ test('11b. bloqueio após várias senhas erradas', async () => {
 });
 
 test('13. backup completo e CSV podem ser baixados e restaurados', async () => {
-  const { DatabaseSync } = await import('node:sqlite');
-  const { writeFileSync, mkdtempSync } = await import('node:fs');
-  const { join } = await import('node:path');
-  const { tmpdir } = await import('node:os');
-  const res = await fetch(`${T.base}/api/exportar/backup.sqlite`, { headers: { cookie: await loginCookie() } });
+  const { openDb } = await import('../server/db.js');
+  const { restoreBackup } = await import('../scripts/restaurar-backup.js');
+  const res = await fetch(`${T.base}/api/exportar/backup.json`, { headers: { cookie: await loginCookie() } });
   assert.equal(res.status, 200);
-  const file = join(mkdtempSync(join(tmpdir(), 'rest-')), 'b.sqlite');
-  writeFileSync(file, Buffer.from(await res.arrayBuffer()));
-  const b = new DatabaseSync(file);
-  assert.equal(b.prepare('SELECT COUNT(*) n FROM appointments').get().n, db.prepare('SELECT COUNT(*) n FROM appointments').get().n);
-  assert.equal(b.prepare('SELECT COUNT(*) n FROM products').get().n, 47);
+  const dump = await res.json();
+  assert.equal(dump.app, 'verdugo');
+  // restaura num banco novo e confere que ficou igual
+  const b = openDb('memory:');
+  const cont = restoreBackup(b, dump);
+  assert.equal(cont.products, 47);
+  for (const t of ['appointments', 'appointment_items', 'products', 'stock_movements', 'online_orders', 'cash_outs', 'payables', 'owner'])
+    assert.equal(b.prepare(`SELECT COUNT(*) n FROM ${t}`).get().n, db.prepare(`SELECT COUNT(*) n FROM ${t}`).get().n, t);
+  assert.equal(b.prepare("SELECT COALESCE(SUM(qty),0) s FROM stock_movements").get().s, db.prepare("SELECT COALESCE(SUM(qty),0) s FROM stock_movements").get().s);
+  // depois de restaurar, novos cadastros continuam a numeração (sem conflito de id)
+  const maxId = b.prepare('SELECT MAX(id) m FROM barbers').get().m;
+  const novo = b.prepare("INSERT INTO barbers(name, active, created_at, updated_at) VALUES ('Novo', 1, 'x', 'x')").run();
+  assert.equal(novo.lastInsertRowid, maxId + 1);
   b.close();
   const csv = await api.get('/api/exportar/atendimentos.csv');
   assert.equal(csv.status, 200);

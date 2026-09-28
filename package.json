@@ -4,15 +4,22 @@
   "private": true,
   "description": "Sistema de gestão da Verdugo Barbearia e Prótese Capilar",
   "type": "module",
-  "engines": { "node": ">=22.13" },
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
-    "start": "node --disable-warning=ExperimentalWarning server/index.js",
-    "definir-senha": "node --disable-warning=ExperimentalWarning scripts/definir-senha.js",
-    "importar-planilha": "node --disable-warning=ExperimentalWarning scripts/importar-planilha.js",
-    "backup": "node --disable-warning=ExperimentalWarning scripts/backup.js",
-    "test": "node --disable-warning=ExperimentalWarning --test --test-concurrency=1 tests/*.test.js"
+    "start": "node server/index.js",
+    "definir-senha": "node scripts/definir-senha.js",
+    "importar-planilha": "node scripts/importar-planilha.js",
+    "backup": "node scripts/backup.js",
+    "restaurar-backup": "node scripts/restaurar-backup.js",
+    "test": "node --test --test-concurrency=1 tests/*.test.js"
   },
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8"
   }
 }

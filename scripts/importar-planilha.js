@@ -1,11 +1,12 @@
 // Importa para o banco do app os dados extraídos da planilha (dados/planilha_extraida.json).
-// Uso:  npm run importar-planilha            (usa dados/planilha_extraida.json e dados/verdugo.db)
-//       node scripts/importar-planilha.js <arquivo.json> <banco.db>
+// Uso:  npm run importar-planilha            (usa dados/planilha_extraida.json e o banco de DATABASE_URL)
+//       node scripts/importar-planilha.js <arquivo.json>
+// No site publicado, a importação também pode ser feita na tela /configurar, junto com a criação da conta.
 // Pode rodar mais de uma vez: o que já existe (mesmo SKU/nome) não é duplicado.
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { openDb, tx, nowIso, audit, setSetting } from '../server/db.js';
+import { openDb, tx, savepoint, nowIso, audit, setSetting } from '../server/db.js';
 import { seedDefaults } from '../server/seed.js';
 import { addMovement } from '../server/services/stock.js';
 import { parseMoney, todaySP } from '../server/validate.js';
@@ -69,7 +70,7 @@ export function importPlanilha(db, data) {
     const barberByName = (n) => db.prepare('SELECT * FROM barbers WHERE name=? COLLATE NOCASE').get(n);
     const svcByName = (n) => db.prepare('SELECT * FROM services WHERE name=? COLLATE NOCASE').get(n);
     for (const a of data.atendimentos || []) {
-      try {
+      try { savepoint(db, () => {
         const b = barberByName(a.barbeiro); const s = svcByName(a.servico);
         if (!b || !s || !a.data) throw new Error('barbeiro/serviço/data não encontrado');
         const cheio = Math.round((a.valor_cheio ?? s.price_cents / 100) * 100);
@@ -81,15 +82,15 @@ export function importPlanilha(db, data) {
             `Importado da planilha (${a.aba}, linha ${a.linha})`, now, now).lastInsertRowid);
         db.prepare('INSERT INTO appointment_items(appointment_id, service_id, service_name, price_cents, is_main, position) VALUES (?,?,?,?,1,0)').run(id, s.id, s.name, cheio);
         rep.atendimentos++;
-      } catch (e) { rep.ignorados.push(`${a.aba} linha ${a.linha}: ${e.message}`); }
+      }); } catch (e) { rep.ignorados.push(`${a.aba} linha ${a.linha}: ${e.message}`); }
     }
     for (const s of data.saidas || []) {
-      try {
+      try { savepoint(db, () => {
         const v = parseMoney(s.valor_bruto, 'valor');
         db.prepare(`INSERT INTO cash_outs(date, description, category, amount_cents, payment_method, note, status, needs_review, created_at, updated_at)
             VALUES (?,?,?,?,?,?,'ativo',0,?,?)`).run(s.data || today, s.descricao, s.categoria, v, s.forma, `Importado da planilha (${s.aba}, linha ${s.linha}) ${s.obs || ''}`.trim(), now, now);
         rep.saidas++;
-      } catch (e) { rep.ignorados.push(`Saída ${s.aba} linha ${s.linha}: ${e.message}`); }
+      }); } catch (e) { rep.ignorados.push(`Saída ${s.aba} linha ${s.linha}: ${e.message}`); }
     }
     for (const v of data.vendas_balcao || []) {
       rep.ignorados.push(`Venda de balcão da planilha (linha ${v.linha}, ${v.produto_nome}) — registre no app: a planilha usa nome em vez de SKU.`);
@@ -104,8 +105,8 @@ export function importPlanilha(db, data) {
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const src = process.argv[2] || join(root, 'dados', 'planilha_extraida.json');
-  const dbFile = process.argv[3] || process.env.DB_FILE || join(root, 'dados', 'verdugo.db');
-  const db = openDb(dbFile);
+  if (!process.env.DATABASE_URL) { console.error('Defina DATABASE_URL (conexão do Supabase) antes de importar.'); process.exit(1); }
+  const db = openDb(process.env.DATABASE_URL);
   const rep = importPlanilha(db, JSON.parse(readFileSync(src, 'utf8')));
   console.log(JSON.stringify(rep, null, 2));
 }

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
+import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'node:fs';
 import { join, extname } from 'node:path';
 import { randomBytes } from 'node:crypto';
 import { h, notFound, HttpError } from '../http.js';
@@ -7,12 +7,12 @@ import { tx, audit, nowIso, all, one } from '../db.js';
 import { text, parseMoney, parseDate, parseId, parsePct, oneOf, todaySP, parsePeriod, weekRange, monthRange, ValidationError } from '../validate.js';
 import { periodReport, alerts, cashPosition } from '../services/reports.js';
 
-/** troca undefined por null (o SQLite não aceita undefined) */
+/** troca undefined por null */
 const nn = (o) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, v === undefined ? null : v]));
 
 const RECEIPT_TYPES = { 'image/jpeg': '.jpg', 'image/png': '.png', 'image/webp': '.webp', 'application/pdf': '.pdf' };
 
-export default function financeiro(db, { uploadsDir }) {
+export default function financeiro(db, { uploadsDir, receiptsInDb = false }) {
   const r = Router();
 
   // ======================= Contas a pagar =======================
@@ -138,9 +138,10 @@ export default function financeiro(db, { uploadsDir }) {
     const buf = Buffer.from(String(receipt.data || '').replace(/^data:[^,]+,/, ''), 'base64');
     if (!buf.length) throw new ValidationError('Comprovante vazio.', 'receipt');
     if (buf.length > 4 * 1024 * 1024) throw new ValidationError('Comprovante grande demais (máx. 4 MB).', 'receipt');
-    mkdirSync(uploadsDir, { recursive: true });
     const name = `${Date.now()}-${randomBytes(6).toString('hex')}${ext}`;
-    writeFileSync(join(uploadsDir, name), buf);
+    if (db.remoteStorage) db.storagePut(name, buf.toString('base64'), receipt.type); // Supabase Storage (bucket privado)
+    else if (receiptsInDb) db.prepare('INSERT INTO receipts(name, content_type, data_base64, created_at) VALUES (?,?,?,?)').run(name, receipt.type, buf.toString('base64'), nowIso());
+    else { mkdirSync(uploadsDir, { recursive: true }); writeFileSync(join(uploadsDir, name), buf); }
     return name;
   }
 
@@ -201,9 +202,24 @@ export default function financeiro(db, { uploadsDir }) {
   r.get('/saidas/:id/comprovante', (req, res, next) => {
     try {
       const row = one(db, 'SELECT receipt_path FROM cash_outs WHERE id=?', parseId(req.params.id));
-      if (!row?.receipt_path || !existsSync(join(uploadsDir, row.receipt_path))) throw notFound('Comprovante');
+      if (!row?.receipt_path) throw notFound('Comprovante');
+      const type = Object.entries(RECEIPT_TYPES).find(([, e]) => e === extname(row.receipt_path))?.[0] || 'application/octet-stream';
+      let buf;
+      if (db.remoteStorage) {
+        const f = db.storageGet(row.receipt_path);
+        if (!f.found) throw notFound('Comprovante');
+        buf = Buffer.from(f.data, 'base64');
+      } else if (receiptsInDb) {
+        const f = one(db, 'SELECT data_base64 FROM receipts WHERE name=?', row.receipt_path);
+        if (!f) throw notFound('Comprovante');
+        buf = Buffer.from(f.data_base64, 'base64');
+      } else {
+        if (!existsSync(join(uploadsDir, row.receipt_path))) throw notFound('Comprovante');
+        buf = readFileSync(join(uploadsDir, row.receipt_path));
+      }
       res.setHeader('Cache-Control', 'private, no-store');
-      res.sendFile(join(uploadsDir, row.receipt_path), { headers: { 'Content-Type': Object.entries(RECEIPT_TYPES).find(([, e]) => e === extname(row.receipt_path))?.[0] } });
+      res.setHeader('Content-Type', type);
+      res.send(buf);
     } catch (e) { next(e); }
   });
 

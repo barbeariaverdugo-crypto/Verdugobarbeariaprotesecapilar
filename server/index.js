@@ -5,6 +5,7 @@ import { openDb } from './db.js';
 import { login, logout, requireApiAuth, requirePageAuth, sessionFromReq } from './auth.js';
 import { errorHandler } from './http.js';
 import { seedDefaults } from './seed.js';
+import { setupHandler, hasOwner } from './setup.js';
 import cadastros from './routes/cadastros.js';
 import atendimentos from './routes/atendimentos.js';
 import balcao from './routes/balcao.js';
@@ -16,8 +17,8 @@ import exportar from './routes/exportar.js';
 const here = dirname(fileURLToPath(import.meta.url));
 const PUBLIC = join(here, '..', 'public');
 
-export function createApp({ dbFile, uploadsDir, db: givenDb } = {}) {
-  const db = givenDb ?? openDb(dbFile);
+export function createApp({ databaseUrl, uploadsDir, db: givenDb } = {}) {
+  const db = givenDb ?? openDb(databaseUrl ?? process.env.DATABASE_URL ?? 'memory:');
   seedDefaults(db);
   const app = express();
   app.disable('x-powered-by');
@@ -37,12 +38,20 @@ export function createApp({ dbFile, uploadsDir, db: givenDb } = {}) {
 
   // --- Público: só a tela de login e seus arquivos ---
   const pub = (file) => (req, res) => res.sendFile(join(PUBLIC, file));
-  app.get('/login', (req, res) => (sessionFromReq(db, req) ? res.redirect('/') : res.sendFile(join(PUBLIC, 'login.html'))));
+  app.get('/login', (req, res) => (sessionFromReq(db, req) ? res.redirect('/')
+    : !hasOwner(db) ? res.redirect('/configurar') : res.sendFile(join(PUBLIC, 'login.html'))));
   app.get('/login.js', pub('login.js'));
   app.get('/estilo.css', pub('estilo.css'));
   app.use('/img', express.static(join(PUBLIC, 'img'), { maxAge: '7d' }));
   app.post('/api/login', (req, res, next) => { try { login(db, req, res); } catch (e) { next(e); } });
   app.post('/api/logout', (req, res) => logout(db, req, res));
+  // primeira configuração (só enquanto não existe a conta do proprietário)
+  app.get('/configurar', (req, res) => (hasOwner(db) ? res.redirect('/login') : res.sendFile(join(PUBLIC, 'configurar.html'))));
+  app.get('/configurar.js', pub('configurar.js'));
+  app.post('/api/configurar', (req, res, next) => {
+    if (req.headers['x-verdugo'] !== '1') return res.status(403).json({ erro: 'Requisição recusada.' });
+    try { setupHandler(db)(req, res); } catch (e) { next(e); }
+  });
   app.get('/saude', (req, res) => res.json({ ok: true }));
 
   // --- Tudo daqui para baixo exige a sessão do proprietário ---
@@ -54,7 +63,10 @@ export function createApp({ dbFile, uploadsDir, db: givenDb } = {}) {
   api.use(balcao(db));
   api.use(online(db));
   api.use(estoque(db));
-  api.use(financeiro(db, { uploadsDir: resolve(uploadsDir ?? join(dirname(resolve(dbFile ?? 'dados/verdugo.db')), 'comprovantes')) }));
+  // Comprovantes: Supabase Storage (se configurado) → senão, no próprio banco quando publicado (a Vercel não guarda arquivos)
+  // → senão, numa pasta local (uso no computador / testes).
+  const receiptsInDb = !db.remoteStorage && (process.env.RECEIPTS_IN_DB === '1' || (!!process.env.VERCEL && process.env.RECEIPTS_IN_DB !== '0'));
+  api.use(financeiro(db, { receiptsInDb, uploadsDir: resolve(uploadsDir ?? process.env.UPLOADS_DIR ?? join(here, '..', 'dados', 'comprovantes')) }));
   api.use(exportar(db));
   api.use((req, res) => res.status(404).json({ erro: 'Rota não encontrada.' }));
   app.use('/api', api);
@@ -71,16 +83,16 @@ export function createApp({ dbFile, uploadsDir, db: givenDb } = {}) {
   return app;
 }
 
-// Execução direta: npm start
+// Execução direta: npm start (no computador). Sem DATABASE_URL, usa um banco em memória só para testar.
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const dbFile = process.env.DB_FILE || join(here, '..', 'dados', 'verdugo.db');
-  const app = createApp({ dbFile, uploadsDir: process.env.UPLOADS_DIR });
+  const databaseUrl = process.env.DATABASE_URL || 'memory:';
+  const app = createApp({ databaseUrl });
   const port = Number(process.env.PORT || 3000);
   const host = process.env.HOST || '127.0.0.1';
   const owner = app.locals.db.prepare('SELECT email FROM owner WHERE id=1').get();
   app.listen(port, host, () => {
     console.log(`Verdugo rodando em http://${host}:${port}`);
-    console.log(`Banco de dados: ${dbFile}`);
-    if (!owner) console.log('ATENÇÃO: nenhuma conta criada ainda. Rode:  npm run definir-senha');
+    console.log(databaseUrl.startsWith('memory:') ? 'ATENÇÃO: banco em memória (nada fica salvo). Defina DATABASE_URL para usar o Supabase.' : 'Banco: Supabase (DATABASE_URL)');
+    if (!owner) console.log(`Nenhuma conta criada ainda: abra http://${host}:${port}/configurar ou rode  npm run definir-senha`);
   });
 }

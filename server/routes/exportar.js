@@ -1,8 +1,5 @@
 import { Router } from 'express';
-import { mkdtempSync, rmSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { tmpdir } from 'node:os';
-import { all, audit } from '../db.js';
+import { all, audit, tx, TABLES } from '../db.js';
 import { todaySP } from '../validate.js';
 import { toCsv } from '../services/csv.js';
 import { notFound } from '../http.js';
@@ -15,7 +12,7 @@ const EXPORTS = {
   atendimentos: {
     sql: `SELECT a.id, a.date, b.name barbeiro, a.payment_method, a.subtotal_cents, a.discount_cents, a.total_cents, a.received_cents,
                  a.card_fee_cents, a.commission_pct, a.commission_cents, a.status, a.note,
-                 (SELECT group_concat(service_name || ' (' || printf('%.2f', price_cents/100.0) || ')', ' + ') FROM appointment_items i WHERE i.appointment_id=a.id) servicos
+                 (SELECT string_agg(service_name || ' (' || to_char(price_cents/100.0, 'FM999999990.00') || ')', ' + ' ORDER BY is_main DESC, position, id) FROM appointment_items i WHERE i.appointment_id=a.id) servicos
           FROM appointments a JOIN barbers b ON b.id=a.barber_id ORDER BY a.date, a.id`,
     cols: [['ID', 'id'], ['Data', 'date', brDate], ['Barbeiro', 'barbeiro'], ['Serviços', 'servicos'], ['Pagamento', 'payment_method'],
       ['Subtotal', 'subtotal_cents', brl], ['Desconto', 'discount_cents', brl], ['Total', 'total_cents', brl], ['Recebido', 'received_cents', brl],
@@ -56,6 +53,15 @@ const EXPORTS = {
   },
 };
 
+/** Lê todas as tabelas numa única transação (foto consistente). Sessões e tentativas de login ficam de fora. */
+export function backupData(db) {
+  return tx(db, () => {
+    const tabelas = {};
+    for (const t of TABLES) if (!['sessions', 'login_attempts'].includes(t)) tabelas[t] = all(db, `SELECT * FROM ${t} ORDER BY 1`);
+    return { app: 'verdugo', formato: 1, gerado_em: new Date().toISOString(), tabelas };
+  });
+}
+
 export default function exportar(db) {
   const r = Router();
 
@@ -70,18 +76,17 @@ export default function exportar(db) {
     } catch (err) { next(err); }
   });
 
-  // Cópia completa do banco (para restaurar exatamente como estava)
-  r.get('/exportar/backup.sqlite', (req, res, next) => {
-    const dir = mkdtempSync(join(tmpdir(), 'verdugo-bkp-'));
+  // Cópia completa do banco (todas as tabelas, em JSON) — restaura com: npm run restaurar-backup <arquivo>
+  r.get('/exportar/backup.json', (req, res, next) => {
     try {
-      const file = join(dir, 'backup.sqlite');
-      db.exec(`VACUUM INTO '${file.replace(/'/g, "''")}'`);
-      const buf = readFileSync(file);
-      audit(db, 'backup', 'banco', null, undefined, { bytes: buf.length });
-      res.setHeader('Content-Type', 'application/octet-stream');
-      res.setHeader('Content-Disposition', `attachment; filename="verdugo-backup-${todaySP()}.sqlite"`);
-      res.send(buf);
-    } catch (err) { next(err); } finally { rmSync(dir, { recursive: true, force: true }); }
+      const dump = backupData(db);
+      const body = JSON.stringify(dump);
+      audit(db, 'backup', 'banco', null, undefined, { bytes: body.length });
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('Content-Disposition', `attachment; filename="verdugo-backup-${todaySP()}.json"`);
+      res.setHeader('Cache-Control', 'private, no-store');
+      res.send(body);
+    } catch (err) { next(err); }
   });
 
   return r;

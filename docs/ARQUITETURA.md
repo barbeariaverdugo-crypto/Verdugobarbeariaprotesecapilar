@@ -13,25 +13,25 @@ Celular / computador (navegador)
 │  • regras de estoque/caixa   │
 └──────────────┬───────────────┘
                │
-     dados/verdugo.db  (SQLite: um arquivo)      dados/comprovantes/ (fotos/PDF das saídas)
-     dados/backups/    (cópias automáticas)
+     Supabase (Postgres): todas as tabelas + comprovantes (tabela receipts ou Storage)
 ```
 
-**Por que assim:** é o mais simples que resolve tudo com segurança. Um único programa, um único arquivo de banco,
-sem serviços pagos obrigatórios. SQLite aguenta com folga o volume de uma barbearia com um usuário. O backup é
-copiar um arquivo; restaurar é colocar o arquivo de volta.
+**Por que assim:** o site fica na Vercel (HTTPS, sem servidor para manter) e os dados no Supabase, porque a Vercel não
+guarda arquivos entre um acesso e outro. O código continua escrevendo as consultas de forma direta: a conversa com o
+Postgres acontece numa thread à parte e cada requisição é atendida por inteiro antes da próxima, então as transações
+ficam isoladas como antes. Nomes e SKU usam CITEXT (sem diferença de maiúscula).
 
 | Peça | Escolha | Motivo |
 |---|---|---|
 | Servidor | Node.js 22 + Express (1 dependência) | leve, roda em qualquer lugar |
-| Banco | SQLite nativo do Node (`node:sqlite`) | arquivo único, transações, backup trivial |
+| Banco | Postgres no Supabase (driver `pg`, numa thread própria — `server/db-worker.js`) | dados fora da Vercel, que não guarda arquivos; backup em JSON pela tela |
 | Telas | HTML + CSS + JavaScript puro (sem etapa de build) | abre rápido no celular, fácil de manter |
 | Dinheiro | sempre em **centavos inteiros** | sem erro de arredondamento |
 | Datas | `AAAA-MM-DD` no fuso **America/Sao_Paulo**; exibidas `DD/MM/AAAA` | |
 
 ## Segurança
 
-- **Uma conta só** (tabela `owner` com `CHECK (id = 1)`): não existe rota de cadastro. A conta é criada/trocada pelo comando `npm run definir-senha`, no servidor.
+- **Uma conta só** (tabela `owner` com `CHECK (id = 1)`): não existe rota de cadastro. A conta é criada uma única vez na tela `/configurar` (exige o código `SETUP_TOKEN`) ou pelo comando `npm run definir-senha`.
 - Senha guardada com **scrypt** + sal; nunca em texto.
 - Sessão por cookie `HttpOnly`, `SameSite=Strict` e `Secure` (quando em HTTPS); o banco guarda só o **hash** do token. Sessão dura 14 dias; trocar a senha derruba todas.
 - **Tudo** exige login: a própria tela (`/` e `app.js`) redireciona para `/login`; a API responde 401. Só a tela de login e o logotipo são públicos.
@@ -62,7 +62,7 @@ copiar um arquivo; restaurar é colocar o arquivo de volta.
 
 ## Onde ficam os dados e como restaurar
 
-- Banco: `dados/verdugo.db` (ou o caminho em `DB_FILE`). Comprovantes: `dados/comprovantes/`.
-- Backup pela tela: **Cadastros → Backup → Baixar backup completo** (arquivo `.sqlite`) e CSVs para Excel.
-- Backup pelo servidor: `npm run backup` (guarda os 60 mais recentes em `dados/backups/`; pode rodar com o app ligado).
-- **Restaurar:** parar o app → copiar o arquivo de backup para `dados/verdugo.db` (apagar `verdugo.db-wal` e `verdugo.db-shm` se existirem) → ligar o app.
+- Banco: Supabase (`DATABASE_URL`). Comprovantes: tabela `receipts` ou Supabase Storage.
+- Backup pela tela: **Cadastros → Backup → Baixar backup completo** (arquivo `.json`) e CSVs para Excel.
+- Backup pelo computador: `DATABASE_URL=... npm run backup` (guarda os 60 mais recentes em `dados/backups/`).
+- **Restaurar:** `DATABASE_URL=... npm run restaurar-backup arquivo.json`.

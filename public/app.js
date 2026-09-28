@@ -1049,8 +1049,8 @@ CAD.config = async (body) => {
 CAD.backup = async (body) => {
   const csvs = [['atendimentos', 'Atendimentos'], ['balcao', 'Vendas de balcão'], ['online', 'Vendas online'], ['produtos', 'Produtos e saldos'], ['movimentacoes', 'Movimentações de estoque'], ['contas', 'Contas a pagar'], ['saidas', 'Saídas de caixa']];
   body.innerHTML = `<div class="grid grid-2"><div class="card stack"><h3>Cópia completa (para restaurar)</h3>
-      <p>Baixa o banco de dados inteiro num arquivo. Guarde em outro lugar (Google Drive, pen drive). Para restaurar, veja o passo a passo no manual (README).</p>
-      <a class="btn primario" href="/api/exportar/backup.sqlite">Baixar backup completo</a></div>
+      <p>Baixa todos os dados do sistema num arquivo (.json). Guarde em outro lugar (Google Drive, pen drive). Para restaurar, veja o passo a passo no manual (README).</p>
+      <a class="btn primario" href="/api/exportar/backup.json">Baixar backup completo</a></div>
     <div class="card"><h3>Planilhas (CSV)</h3><p class="hint">Abrem no Excel/Google Planilhas.</p><div class="list">${csvs.map(([k, l]) => `<div class="row"><div class="main">${l}</div><a class="btn pequeno fantasma" href="/api/exportar/${k}.csv">Baixar</a></div>`).join('')}</div></div></div>`;
 };
 

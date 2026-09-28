@@ -40,7 +40,7 @@ export function periodReport(db, start, end) {
                           WHERE v.status='ativo' AND v.date BETWEEN ? AND ?`, start, end).q;
   const porVendedor = all(db, `SELECT COALESCE(b.name,'(sem responsável)') name, COUNT(v.id) vendas, SUM(v.total_cents) total
                                FROM counter_sales v LEFT JOIN barbers b ON b.id = v.seller_barber_id
-                               WHERE v.status='ativo' AND v.date BETWEEN ? AND ? GROUP BY v.seller_barber_id ORDER BY total DESC`, start, end);
+                               WHERE v.status='ativo' AND v.date BETWEEN ? AND ? GROUP BY v.seller_barber_id, b.name ORDER BY total DESC`, start, end);
 
   // dinheiro só "entrou" se a data do repasse já chegou (repasse futuro = ainda a receber)
   const hoje = todaySP();
@@ -101,7 +101,7 @@ export function alerts(db) {
   const today = todaySP();
   const lowStock = all(db, `SELECT p.id, p.sku, p.name, p.min_stock, COALESCE(SUM(m.qty),0) saldo
                             FROM products p LEFT JOIN stock_movements m ON m.product_id = p.id
-                            WHERE p.active = 1 GROUP BY p.id HAVING saldo <= p.min_stock ORDER BY saldo - p.min_stock, p.name`);
+                            WHERE p.active = 1 GROUP BY p.id HAVING COALESCE(SUM(m.qty),0) <= p.min_stock ORDER BY COALESCE(SUM(m.qty),0) - p.min_stock, p.name`);
   const vencidas = all(db, `SELECT * FROM payables WHERE status='pendente' AND needs_review=0 AND due_date < ? ORDER BY due_date`, today);
   const aVencer = all(db, `SELECT * FROM payables WHERE status='pendente' AND needs_review=0 AND due_date BETWEEN ? AND ? ORDER BY due_date`,
     today, addDays(today, 7));

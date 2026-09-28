@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Primeira configuração — Verdugo</title>
+  <link rel="icon" href="/img/favicon.png">
+  <link rel="stylesheet" href="/estilo.css">
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login">
+      <img src="/img/logo.jpg" alt="Verdugo Barbearia e Prótese Capilar">
+      <form class="card form" id="form-config" autocomplete="off">
+        <h2>Primeira configuração</h2>
+        <p class="hint">Cria a conta do proprietário. Esta tela só funciona uma vez: depois que a conta existe, ela some.</p>
+        <label>Código de configuração<input type="password" name="token" required autocomplete="off"></label>
+        <p class="hint">É o valor de SETUP_TOKEN que você colocou nas variáveis da Vercel.</p>
+        <label>Seu e-mail<input type="email" name="email" autocomplete="username" required></label>
+        <label>Senha (mín. 10 caracteres, letras e números)<input type="password" name="senha" autocomplete="new-password" required minlength="10"></label>
+        <label>Repita a senha<input type="password" name="senha2" autocomplete="new-password" required minlength="10"></label>
+        <label class="check"><input type="checkbox" name="importar" checked> Importar os dados da planilha (barbeiros, serviços, produtos, contas e caixas)</label>
+        <div id="erro" class="alert red hidden" role="alert"></div>
+        <div id="ok" class="alert blue hidden" role="status"></div>
+        <button class="btn primario" type="submit">Criar conta</button>
+      </form>
+    </div>
+  </div>
+  <script src="/configurar.js"></script>
+</body>
+</html>

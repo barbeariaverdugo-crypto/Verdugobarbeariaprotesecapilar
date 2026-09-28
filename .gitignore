@@ -3,3 +3,6 @@ dados/*.db
 dados/*.db-*
 dados/backups/
 dados/comprovantes/
+vercel-static/
+.vercel
+.env*

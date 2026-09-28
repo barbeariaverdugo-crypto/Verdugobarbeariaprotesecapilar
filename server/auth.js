@@ -62,7 +62,7 @@ export function sessionFromReq(db, req) {
   return s;
 }
 
-function tooManyFails(db, ip) {
+export function tooManyFails(db, ip) {
   const since = new Date(Date.now() - WINDOW_MIN * 60000).toISOString();
   const r = one(db, 'SELECT COUNT(*) AS n FROM login_attempts WHERE ip = ? AND ok = 0 AND at > ?', ip, since);
   return r.n >= MAX_FAILS;

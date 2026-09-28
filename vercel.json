@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "mkdir -p vercel-static && echo ok > vercel-static/.keep",
+  "outputDirectory": "vercel-static",
+  "regions": ["gru1"],
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 30,
+      "includeFiles": "{server/**,public/**,scripts/importar-planilha.js,dados/planilha_extraida.json}"
+    }
+  },
+  "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
+}

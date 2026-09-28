@@ -10,10 +10,25 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 export const EMAIL = 'dono@verdugo.test';
 export const SENHA = 'SenhaForte2026';
 
+/**
+ * Banco dos testes: Postgres em memória (PGlite). Com TEST_PG_URL (ex.: postgres://postgres:senha@localhost:5432/postgres),
+ * cria um banco novo nesse servidor Postgres de verdade — testa o mesmo driver usado com o Supabase.
+ */
+export async function testDatabaseUrl() {
+  const base = process.env.TEST_PG_URL;
+  if (!base) return 'memory:';
+  const pg = (await import('pg')).default;
+  const name = `verdugo_teste_${Date.now()}_${Math.floor(Math.random() * 1e6)}`;
+  const c = new pg.Client({ connectionString: base });
+  await c.connect(); await c.query(`CREATE DATABASE ${name}`); await c.end();
+  const u = new URL(base); u.pathname = `/${name}`;
+  return u.toString();
+}
+
 /** Sobe o app num banco temporário (com os dados da planilha importados) e devolve um cliente já logado. */
 export async function startApp({ importar = true } = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'verdugo-test-'));
-  const app = createApp({ dbFile: join(dir, 'teste.db'), uploadsDir: join(dir, 'comprovantes') });
+  const app = createApp({ databaseUrl: await testDatabaseUrl(), uploadsDir: join(dir, 'comprovantes') });
   const db = app.locals.db;
   setOwner(db, EMAIL, SENHA);
   let importRep = null;
@@ -23,7 +38,7 @@ export async function startApp({ importar = true } = {}) {
   const anon = client(base, null);
   const login = await anon.post('/api/login', { email: EMAIL, senha: SENHA });
   const cookie = login.headers.get('set-cookie').split(';')[0];
-  return { app, db, server, base, api: client(base, cookie), anon, importRep, close: () => new Promise((r) => server.close(r)) };
+  return { app, db, server, base, api: client(base, cookie), anon, importRep, close: () => new Promise((r) => server.close(() => { db.close(); r(); })) };
 }
 
 export function client(base, cookie) {
