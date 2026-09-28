@@ -1,0 +1,981 @@
+{
+ "origem": "../analise/fonte.xlsx",
+ "extraido_em": "2026-09-27T13:07:14",
+ "listas": {
+  "cat_produto": [
+   "Próteses",
+   "Acessórios",
+   "Cuidados",
+   "Barbearia",
+   "Outros"
+  ],
+  "pagamento": [
+   "Dinheiro",
+   "Pix",
+   "Cartão de Débito",
+   "Cartão de Crédito",
+   "Cartão",
+   "Transferência"
+  ],
+  "cat_despesa": [
+   "Aluguel",
+   "Fornecedor",
+   "Utilidades",
+   "Suprimentos",
+   "Impostos",
+   "Outros"
+  ]
+ },
+ "barbeiros": [
+  "Pedro",
+  "André",
+  "Christopher"
+ ],
+ "servicos": [
+  {
+   "nome": "Corte",
+   "preco": 55.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Barba",
+   "preco": 45.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte e Barba",
+   "preco": 100.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte e Barboterapia",
+   "preco": 110.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte Raspado",
+   "preco": 50.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte Raspado e Barba",
+   "preco": 95.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte e Sobrancelha",
+   "preco": 65.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte e Botox",
+   "preco": 125.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte e Luzes Amarelas",
+   "preco": 165.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte e Luzes Platinada",
+   "preco": 235.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte e Progressiva",
+   "preco": 145.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte e Tintura na Barba",
+   "preco": 95.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte e Tintura no Cabelo",
+   "preco": 105.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte e Alisamento",
+   "preco": 95.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Barba e Pezinho",
+   "preco": 80.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Barba e Tintura na Barba",
+   "preco": 85.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Barba, Pezinho e Sobrancelha",
+   "preco": 115.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Manutenção Prótese Capilar",
+   "preco": 110.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Meia Manutenção",
+   "preco": 70.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Manutenção Frontal e Corte",
+   "preco": 80.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Manutenção e Barba",
+   "preco": 155.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Meia Manutenção e Barba",
+   "preco": 115.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Manutenção Frontal, Corte e Barba",
+   "preco": 125.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte 4x",
+   "preco": 198.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte e Barba 2x",
+   "preco": 180.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte e Barba 4x",
+   "preco": 340.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte e Barboterapia 2x",
+   "preco": 198.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Corte e Barboterapia 4x",
+   "preco": 374.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Manutenção Prótese 2x",
+   "preco": 200.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Intercalados Corte e Barba / 3 Barbas 4x",
+   "preco": 211.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Intercalados Corte e Barba / Perfil e Barba 4x",
+   "preco": 306.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Alisamento",
+   "preco": 40.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Aplicação de Prótese Capilar",
+   "preco": 1000.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Barboterapia",
+   "preco": 55.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Botox",
+   "preco": 70.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Luzes Amarelas",
+   "preco": 110.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Luzes Platinado",
+   "preco": 180.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Penteado",
+   "preco": 35.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Pezinho",
+   "preco": 35.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Platinado Cabelo Todo",
+   "preco": 230.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Progressiva",
+   "preco": 90.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Pezinho e Botox",
+   "preco": 105.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Pezinho e Progressiva",
+   "preco": 125.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Sombrancelha",
+   "preco": 35.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Tintura na Barba",
+   "preco": 40.0,
+   "preco_a_confirmar": false
+  },
+  {
+   "nome": "Tintura no Cabelo",
+   "preco": 50.0,
+   "preco_a_confirmar": false
+  }
+ ],
+ "produtos": [
+  {
+   "sku": "PC-001",
+   "nome": "Prótese Capilar Castanho Escuro",
+   "categoria": "Próteses",
+   "custo": 380.0,
+   "preco": 950.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 15,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PC-002",
+   "nome": "Prótese Capilar Castanho",
+   "categoria": "Próteses",
+   "custo": 380.0,
+   "preco": 950.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 9,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PC-003",
+   "nome": "Prótese Capilar Castanho Médio",
+   "categoria": "Próteses",
+   "custo": 380.0,
+   "preco": 950.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 6,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PC-004",
+   "nome": "Prótese Capilar Castanho Claro",
+   "categoria": "Próteses",
+   "custo": 380.0,
+   "preco": 950.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 2,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PC-007",
+   "nome": "Prótese Capilar Loiro",
+   "categoria": "Próteses",
+   "custo": 380.0,
+   "preco": 950.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 3,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PC-010",
+   "nome": "Prótese Capilar 10% Grisalho",
+   "categoria": "Próteses",
+   "custo": 380.0,
+   "preco": 950.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 3,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PC-020",
+   "nome": "Prótese Capilar 20% Grisalho",
+   "categoria": "Próteses",
+   "custo": 380.0,
+   "preco": 950.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 2,
+   "minimo": 5,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PC-030",
+   "nome": "Prótese Capilar 30% Grisalho",
+   "categoria": "Próteses",
+   "custo": 380.0,
+   "preco": 950.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 7,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PC-040",
+   "nome": "Prótese Capilar 40% Grisalho",
+   "categoria": "Próteses",
+   "custo": 380.0,
+   "preco": 950.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 3,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PC-050",
+   "nome": "Prótese Capilar 50% Grisalho",
+   "categoria": "Próteses",
+   "custo": 380.0,
+   "preco": 950.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 2,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PC-060",
+   "nome": "Prótese Capilar 60% Grisalho",
+   "categoria": "Próteses",
+   "custo": 380.0,
+   "preco": 950.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 7,
+   "minimo": 5,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PC-210",
+   "nome": "Prótese Capilar Castanho 10%",
+   "categoria": "Próteses",
+   "custo": 380.0,
+   "preco": 950.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 2,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PC-220",
+   "nome": "Prótese Capilar Castanho 20%",
+   "categoria": "Próteses",
+   "custo": 380.0,
+   "preco": 950.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 7,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PC-230",
+   "nome": "Prótese Capilar Castanho 30%",
+   "categoria": "Próteses",
+   "custo": 380.0,
+   "preco": 950.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 6,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PC-240",
+   "nome": "Prótese Capilar Castanho 40%",
+   "categoria": "Próteses",
+   "custo": 380.0,
+   "preco": 950.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 4,
+   "minimo": 3,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PC-250",
+   "nome": "Prótese Capilar Castanho 50%",
+   "categoria": "Próteses",
+   "custo": 380.0,
+   "preco": 950.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 3,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PCH-070",
+   "nome": "Prótese Capilar 70% H Grisalho",
+   "categoria": "Próteses",
+   "custo": 500.0,
+   "preco": 1250.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 3,
+   "minimo": 1,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PCH-080",
+   "nome": "Prótese Capilar 80% H Grisalho",
+   "categoria": "Próteses",
+   "custo": 500.0,
+   "preco": 1250.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 4,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PCH-090",
+   "nome": "Prótese Capilar 90% H Grisalho",
+   "categoria": "Próteses",
+   "custo": 500.0,
+   "preco": 1250.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 3,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PCH-100",
+   "nome": "Prótese Capilar 100% H Grisalho",
+   "categoria": "Próteses",
+   "custo": 550.0,
+   "preco": 1250.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 2,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "BIO-001",
+   "nome": "Prótese Bio Castanho Escuro",
+   "categoria": "Próteses",
+   "custo": 500.0,
+   "preco": 1250.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 1,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "CAC-001",
+   "nome": "Prótese Cacheada #1b",
+   "categoria": "Próteses",
+   "custo": 500.0,
+   "preco": 1250.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 2,
+   "minimo": 1,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "AFR-001",
+   "nome": "Prótese Afro #1b",
+   "categoria": "Próteses",
+   "custo": 500.0,
+   "preco": 1250.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 1,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "FUH-001",
+   "nome": "Fita Ultra Hold",
+   "categoria": "Próteses",
+   "custo": 30.0,
+   "preco": 0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": true,
+   "saldo": 12,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "MAX-001",
+   "nome": "Max Hold",
+   "categoria": "Próteses",
+   "custo": 70.0,
+   "preco": 150.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 5,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "FEB-001",
+   "nome": "Fita Extenda Bonde",
+   "categoria": "Próteses",
+   "custo": 5.0,
+   "preco": 16.14,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 302,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "SHD-001",
+   "nome": "Shampoo Doux",
+   "categoria": "Próteses",
+   "custo": 55.0,
+   "preco": 75.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 12,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "ARG-001",
+   "nome": "Óleo Argan",
+   "categoria": "Próteses",
+   "custo": 40.0,
+   "preco": 60.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 25,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "MAR-001",
+   "nome": "Óleo Maracujá",
+   "categoria": "Próteses",
+   "custo": 50.0,
+   "preco": 60.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 15,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "MAS-001",
+   "nome": "Máscara Hidratante 250ml",
+   "categoria": "Próteses",
+   "custo": 60.0,
+   "preco": 85.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 6,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "LEV-001",
+   "nome": "Leave-in",
+   "categoria": "Próteses",
+   "custo": 80.0,
+   "preco": 0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": true,
+   "saldo": 14,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "FTG-001",
+   "nome": "Fixa Gold",
+   "categoria": "Próteses",
+   "custo": 18.0,
+   "preco": 45.0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": false,
+   "saldo": 8,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "FUF-001",
+   "nome": "Fita Ultra Fosca",
+   "categoria": "Próteses",
+   "custo": 0,
+   "preco": 0,
+   "custo_a_confirmar": true,
+   "preco_a_confirmar": true,
+   "saldo": 4,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PPO-001",
+   "nome": "Pomada P6",
+   "categoria": "Barbearia",
+   "custo": 0,
+   "preco": 50.0,
+   "custo_a_confirmar": true,
+   "preco_a_confirmar": false,
+   "saldo": 5,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PTE-001",
+   "nome": "Pomada Tera",
+   "categoria": "Barbearia",
+   "custo": 0,
+   "preco": 30.0,
+   "custo_a_confirmar": true,
+   "preco_a_confirmar": false,
+   "saldo": 12,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PCA-001",
+   "nome": "Pomada Caramelo",
+   "categoria": "Barbearia",
+   "custo": 30.0,
+   "preco": 0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": true,
+   "saldo": 14,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PPR-001",
+   "nome": "Pomada Periosida",
+   "categoria": "Barbearia",
+   "custo": 30.0,
+   "preco": 0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": true,
+   "saldo": 10,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PEL-001",
+   "nome": "Pomada Element",
+   "categoria": "Barbearia",
+   "custo": 30.0,
+   "preco": 0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": true,
+   "saldo": 24,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PAN-001",
+   "nome": "Pomada Alfa Natural",
+   "categoria": "Barbearia",
+   "custo": 30.0,
+   "preco": 0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": true,
+   "saldo": 10,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PCE-001",
+   "nome": "Pomada Cera",
+   "categoria": "Barbearia",
+   "custo": 40.0,
+   "preco": 0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": true,
+   "saldo": 14,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "PPM-001",
+   "nome": "Pomada Pasta Modeladora",
+   "categoria": "Barbearia",
+   "custo": 40.0,
+   "preco": 0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": true,
+   "saldo": 13,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "GEL-001",
+   "nome": "Gel Cola",
+   "categoria": "Barbearia",
+   "custo": 20.0,
+   "preco": 0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": true,
+   "saldo": 12,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "BAL-001",
+   "nome": "Balm 120g",
+   "categoria": "Barbearia",
+   "custo": 40.0,
+   "preco": 0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": true,
+   "saldo": 9,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "MIN-001",
+   "nome": "Minoxidil",
+   "categoria": "Barbearia",
+   "custo": 50.0,
+   "preco": 0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": true,
+   "saldo": 18,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "VIP-0212",
+   "nome": "212 VIP",
+   "categoria": "Barbearia",
+   "custo": 60.0,
+   "preco": 0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": true,
+   "saldo": 5,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "ASD-001",
+   "nome": "Azad",
+   "categoria": "Barbearia",
+   "custo": 60.0,
+   "preco": 0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": true,
+   "saldo": 5,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  },
+  {
+   "sku": "MIL-001",
+   "nome": "1 Million",
+   "categoria": "Barbearia",
+   "custo": 60.0,
+   "preco": 0,
+   "custo_a_confirmar": false,
+   "preco_a_confirmar": true,
+   "saldo": 5,
+   "minimo": 2,
+   "fornecedor": null,
+   "obs": null
+  }
+ ],
+ "contas": [
+  {
+   "vencimento": "2026-06-10",
+   "descricao": "Aluguel do salão",
+   "categoria": "Aluguel",
+   "valor": 2200.0,
+   "status": "pago",
+   "pago_em": "2026-06-09",
+   "forma": "Pix",
+   "obs": null,
+   "linha": 2,
+   "a_confirmar": true
+  },
+  {
+   "vencimento": "2026-06-15",
+   "descricao": "Fornecedor A - lote próteses",
+   "categoria": "Fornecedor",
+   "valor": 3500.0,
+   "status": "pago",
+   "pago_em": "2026-06-14",
+   "forma": "Transferência",
+   "obs": null,
+   "linha": 3,
+   "a_confirmar": true
+  },
+  {
+   "vencimento": "2026-07-05",
+   "descricao": "Energia elétrica",
+   "categoria": "Utilidades",
+   "valor": 380.0,
+   "status": "pendente",
+   "pago_em": null,
+   "forma": null,
+   "obs": null,
+   "linha": 4,
+   "a_confirmar": true
+  },
+  {
+   "vencimento": "2026-07-20",
+   "descricao": "Internet + telefone",
+   "categoria": "Utilidades",
+   "valor": 150.0,
+   "status": "pendente",
+   "pago_em": null,
+   "forma": null,
+   "obs": null,
+   "linha": 5,
+   "a_confirmar": true
+  },
+  {
+   "vencimento": "2026-07-01",
+   "descricao": "Produtos de limpeza",
+   "categoria": "Suprimentos",
+   "valor": 95.0,
+   "status": "pendente",
+   "pago_em": null,
+   "forma": null,
+   "obs": "vencida - verificar",
+   "linha": 6,
+   "a_confirmar": true
+  },
+  {
+   "vencimento": "2026-07-16",
+   "descricao": "Compra de produtos de limpeza",
+   "categoria": "Suprimentos",
+   "valor": 120.0,
+   "status": "pago",
+   "pago_em": "2026-07-16",
+   "forma": "Pix",
+   "obs": null,
+   "linha": 7,
+   "a_confirmar": true
+  }
+ ],
+ "caixas": [
+  {
+   "nome": "Banco Inter PJ",
+   "saldo": 4200.0,
+   "a_confirmar": true
+  },
+  {
+   "nome": "Nubank PJ",
+   "saldo": 1850.0,
+   "a_confirmar": true
+  },
+  {
+   "nome": "Maquininha de Cartão (a receber)",
+   "saldo": 320.0,
+   "a_confirmar": true
+  },
+  {
+   "nome": "Dinheiro em Espécie (Caixa da Loja)",
+   "saldo": 600.0,
+   "a_confirmar": true
+  }
+ ],
+ "atendimentos": [],
+ "saidas": [],
+ "vendas_balcao": [],
+ "vendas_online": [],
+ "avisos": [],
+ "comissao_padrao": 0.5
+}

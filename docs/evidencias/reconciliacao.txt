@@ -1,0 +1,13 @@
+OK    servicos_valor_cheio   planilha=     420.0  app=     420.0
+OK    servicos_recebido      planilha=     414.3  app=     414.3
+OK    comissao               planilha=     210.0  app=     210.0
+OK    saidas                 planilha=     100.9  app=     100.9
+OK    balcao_total           planilha=     390.0  app=     390.0
+OK    balcao_qtd             planilha=         6  app=         6
+OK    ml_bruto               planilha=    629.64  app=    629.64
+OK    ml_taxas               planilha=    114.16  app=    114.16
+OK    ml_frete               planilha=     22.55  app=     22.55
+OK    ml_liquido             planilha=    492.93  app=    492.93
+OK    shopee_bruto           planilha=     170.0  app=     170.0
+OK    shopee_liquido         planilha=     114.2  app=     114.2
+OK    estoque por SKU        47 SKUs comparados, 0 diferença(s) []

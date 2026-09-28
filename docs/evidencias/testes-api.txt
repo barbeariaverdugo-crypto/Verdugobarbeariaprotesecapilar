@@ -1,0 +1,26 @@
+ok 1 - 0. importação da planilha trouxe cadastros e marcou dados duvidosos
+ok 2 - 1. atendimento com serviço principal + vários adicionais calcula certo
+ok 3 - 2. barbeiro novo aparece nos lançamentos e nos relatórios
+ok 4 - 3. anotações ficam ligadas ao barbeiro selecionado
+ok 5 - 4. venda de balcão baixa o MESMO estoque que as vendas online (por SKU)
+ok 6 - 5. os quatro canais aparecem separados nos relatórios
+ok 7 - 6. reimportar o mesmo pedido não duplica venda nem baixa de estoque
+ok 8 - 7. pedido cancelado/devolvido segue a regra de estoque e continua nos relatórios
+ok 9 - 8. conta paga entra no caixa uma única vez
+ok 10 - 9. fechamento semanal/mensal separa bruto, taxas, líquido e repasse
+ok 11 - 10. texto em campo numérico é bloqueado e não afeta os totais
+ok 12 - 11a. só a conta do proprietário acessa (API e páginas)
+ok 13 - 11b. bloqueio após várias senhas erradas
+ok 14 - 13. backup completo e CSV podem ser baixados e restaurados
+ok 15 - R1. reimportar não apaga repasse, observação nem "não voltou ao estoque" lançados à mão
+ok 16 - R2. SKU que chegou sem cadastro baixa o estoque quando o produto é cadastrado (uma vez só)
+ok 17 - R3. porcentagem é sempre em %: "1" = 1%, "0,5" = 0,5%
+ok 18 - R4. comissão fica congelada mesmo se a regra mudar depois
+ok 19 - R5. repasse com data futura continua "a receber" e não entra no caixa
+ok 20 - R6. status negativo ("Não pago") é recusado na importação; tarifas negativas do extrato entram como taxa
+ok 21 - R7. SKU passado para outro produto: estoque corrigido nos dois
+ok 22 - R8. entradas estranhas não derrubam o servidor
+ok 23 - R9. data com horário e fuso vira o dia certo em São Paulo
+# tests 23
+# pass 23
+# fail 0

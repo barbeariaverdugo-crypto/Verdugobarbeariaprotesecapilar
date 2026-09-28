@@ -1,0 +1,5 @@
+node_modules/
+dados/*.db
+dados/*.db-*
+dados/backups/
+dados/comprovantes/

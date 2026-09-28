@@ -1,0 +1,18 @@
+{
+  "name": "verdugo-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sistema de gestão da Verdugo Barbearia e Prótese Capilar",
+  "type": "module",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server/index.js",
+    "definir-senha": "node --disable-warning=ExperimentalWarning scripts/definir-senha.js",
+    "importar-planilha": "node --disable-warning=ExperimentalWarning scripts/importar-planilha.js",
+    "backup": "node --disable-warning=ExperimentalWarning scripts/backup.js",
+    "test": "node --disable-warning=ExperimentalWarning --test --test-concurrency=1 tests/*.test.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

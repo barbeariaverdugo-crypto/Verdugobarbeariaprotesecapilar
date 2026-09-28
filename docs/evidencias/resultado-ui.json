@@ -1,0 +1,97 @@
+[
+ {
+  "teste": "[celular] sem login vai para a tela de entrada",
+  "ok": true,
+  "detalhe": "http://127.0.0.1:3199/login#/financeiro"
+ },
+ {
+  "teste": "[celular] senha errada é recusada",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "teste": "[celular] menu de navegação visível",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "teste": "[celular] sem rolagem horizontal",
+  "ok": true,
+  "detalhe": "scrollWidth=390"
+ },
+ {
+  "teste": "[celular] anotação salva no painel do barbeiro selecionado",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "teste": "[celular] texto no preço fica marcado em vermelho",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "teste": "[celular] envio bloqueado com aviso",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "teste": "[celular] resumo calcula 55+45+30−5 = 125",
+  "ok": true,
+  "detalhe": "Serviços | R$ 130,00 | Desconto | − R$ 5,00 | Total | R$ 125,00 | Taxa maquininha | R$ 0,00 | Comissão (50%) | R$ 65,00"
+ },
+ {
+  "teste": "[celular] atendimento salvo com 3 serviços e total 125",
+  "ok": true,
+  "detalhe": "['Corte', 'Barba', 'Sombrancelha'] total=12500"
+ },
+ {
+  "teste": "[celular] anotação ficou só no barbeiro André",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "teste": "[celular] venda de balcão baixou 2 do estoque do ARG-001",
+  "ok": true,
+  "detalhe": "25 -> 23"
+ },
+ {
+  "teste": "[celular] pedido TikTok Shop baixou o MESMO estoque",
+  "ok": true,
+  "detalhe": "23 -> 22"
+ },
+ {
+  "teste": "[celular] nenhum erro no console (inclui bloqueios de segurança/CSP)",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "teste": "[computador] sem login vai para a tela de entrada",
+  "ok": true,
+  "detalhe": "http://127.0.0.1:3199/login#/financeiro"
+ },
+ {
+  "teste": "[computador] senha errada é recusada",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "teste": "[computador] menu de navegação visível",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "teste": "[computador] sem rolagem horizontal",
+  "ok": true,
+  "detalhe": "scrollWidth=1366"
+ },
+ {
+  "teste": "[computador] depois de sair a API recusa (401)",
+  "ok": true,
+  "detalhe": "401"
+ },
+ {
+  "teste": "[computador] nenhum erro no console (inclui bloqueios de segurança/CSP)",
+  "ok": true,
+  "detalhe": ""
+ }
+]
